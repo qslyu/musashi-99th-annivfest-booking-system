@@ -35,12 +35,8 @@ export default function ButtonLoader({ label, labelLoad, isLoading }) {
   return (
     <Button
       type="submit"
-      disabled={
-        isLoading ? (true) : (false)
-      }
-      primary={
-        isLoading ? (false) : (true)
-      }
+      disabled={isLoading ? true : false}
+      primary={isLoading ? false : true}
       label={
         isLoading ? (
           <Box justify="center" direction="row" gap="small">
