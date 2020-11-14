@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import InitFirebase from '../utils/firebase/init'
 import { Heading, Box, Form, FormField, TextInput, Text } from 'grommet'
 import ButtonLoader from '../components/buttonLoader'
 import Layout from '../components/layout'
@@ -10,13 +9,13 @@ import { usernameRules, emailRules, passwordRules } from '../utils/grommet/rules
 
 export default function SignUp() {
   const router = useRouter()
+
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState()
 
   function signUp(val) {
     setLoading(true)
     setError()
-    InitFirebase()
     
     const displayname = val.displayname
     const email = val.email
@@ -26,13 +25,12 @@ export default function SignUp() {
       .then(() => {
         firebase.auth().currentUser.updateProfile({displayName: displayname})
           .then(() => firebase.auth().currentUser.sendEmailVerification())
-          .catch(err => console.log(err))
+          .catch(err => setError(err))
       })
       .then(() => router.push('/emailsent'))
       .catch(err => {
         setLoading(false)
         setError(err.message)
-        console.log(err)
       })
   }
 
