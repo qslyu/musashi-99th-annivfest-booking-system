@@ -1,6 +1,6 @@
 export const usernameRules = [
   {
-    regexp: new RegExp('.{1,}'),
+    regexp: new RegExp('[^\\s]+'),
     message: '入力してください',
     status: 'error'
   }
@@ -16,7 +16,7 @@ export const emailRules = [
 
 export const passwordRules = [
   {
-    regexp: new RegExp('.{6,}'),
+    regexp: new RegExp('[^\\s]{6,}'),
     message: '6文字以上必要です',
     status: 'error'
   }
