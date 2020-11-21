@@ -1,5 +1,5 @@
 import { Box } from 'grommet'
-import { useEffect } from 'react'
+
 export default function Layout({ children }) {
   return (
     <>
