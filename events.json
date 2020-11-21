@@ -1,0 +1,34 @@
+[
+  {
+    "name": "武蔵ツアー",
+    "description": "校内ツアーです。",
+    "time_list": [
+      {
+        "id": "18a0d3ea-09ce-494d-8048-1d837e2bc438",
+        "datetime": "Tue, 19 Aug 1975 23:15:30 GMT",
+        "limit": "1000"
+      },
+      {
+        "id": "83385160-df46-4699-93da-89e67ce26af7",
+        "datetime": "Tue, 19 Aug 1975 23:15:30 GMT",
+        "limit": "1000"
+      }
+    ]
+  },
+  {
+    "name": "講演会",
+    "description": "講演会です。",
+    "time_list": [
+      {
+        "id": "c26ccc8e-3213-4174-bc76-7532d2ba1d2a",
+        "datetime": "Tue, 19 Aug 1975 23:15:30 GMT",
+        "limit": "1000"
+      },
+      {
+        "id": "0c1f2472-1523-4a2f-a8a7-fd66a8e3e854",
+        "datetime": "Tue, 19 Aug 1975 23:15:30 GMT",
+        "limit": "1000"
+      }
+    ]
+  }
+]
