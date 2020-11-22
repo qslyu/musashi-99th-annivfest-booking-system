@@ -22,11 +22,8 @@ export default function SignUp() {
     const password = val.password
   
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        firebase.auth().currentUser.updateProfile({displayName: displayname})
-          .then(() => firebase.auth().currentUser.sendEmailVerification())
-          .catch(err => setError(err))
-      })
+      .then(() => firebase.auth().currentUser.updateProfile({displayName: displayname}))
+      .then(() => firebase.auth().currentUser.sendEmailVerification())
       .then(() => router.push('/emailsent'))
       .catch(err => {
         setLoading(false)
