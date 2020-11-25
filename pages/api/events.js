@@ -41,7 +41,7 @@ export default async function handler (req, res) {
     })
     .then(async data => {
       for(let i = 0; i < data.length; i++) {
-        data[i].isFull = await isFull(data[i].id)
+        data[i].is_full = await isFull(data[i].id)
       }
 
       res.statusCode = 200
