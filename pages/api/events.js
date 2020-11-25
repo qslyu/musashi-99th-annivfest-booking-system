@@ -1,37 +1,50 @@
 import admin from 'firebase-admin'
 import initFirebaseAdmin from '../../utils/firebase/initAdmin'
-import events from '../../events.json'
+import timeList from '../../time_list.json'
+import { connectToDatabase } from '../../utils/mongodb'
+import { isFull } from '../../utils/validateEvents'
 
 export default async function handler (req, res) {
   const {
     query: { token },
   } = req
 
-  if(!token) {
-    res.statusCode = 400
-    res.json({ error: 'bad request' })
-    return
-  }
-
   initFirebaseAdmin()
+
+  const { db } = await connectToDatabase()
   
   await admin.auth().verifyIdToken(token)
     .then(decodedToken => {
-      const db = admin.firestore()
-      return db.collection('bookings').where('user', '==', decodedToken.uid).get()
+      if(!decodedToken.email_verified) {
+        throw new Error('email is not verified')
+      }
+      return decodedToken
     })
-    .then(querySnapshot => {
-      const data = events
-
-      querySnapshot.forEach(doc => {
-        data.forEach(eventInfo => {
-          eventInfo.time_list.forEach(timeList => {
-            timeList.is_reserved = (timeList.id == doc.data().event)
-          })
-        })
+    .then(async decodedToken => await db.collection('bookings')
+      .find({
+        user: decodedToken.uid
+      })
+      .toArray()
+    )
+    .then(reservedTimes => {
+      const data = timeList
+      data.forEach(time => {
+        time.is_reserved = false
       })
 
-      res.statusCode= 200
+      reservedTimes.forEach(reservedTime => {
+        const index = timeList.findIndex(time => time.id == reservedTime.time_id)
+        data[index].is_reserved = true
+      })
+
+      return data
+    })
+    .then(async data => {
+      for(let i = 0; i < data.length; i++) {
+        data[i].isFull = await isFull(data[i].id)
+      }
+
+      res.statusCode = 200
       res.json(data)
     })
     .catch(err => {
