@@ -1,17 +1,14 @@
 import admin from 'firebase-admin'
 import initFirebaseAdmin from '../../utils/firebase/initAdmin'
 import timeList from '../../time_list.json'
-import { connectToDatabase } from '../../utils/mongodb'
-import { isFull } from '../../utils/validateEvents'
+import { isReserved, isFull } from '../../utils/validateTimeID'
 
-export default async function handler (req, res) {
+export default async function handler(req, res) {
   const {
     query: { token },
   } = req
 
   initFirebaseAdmin()
-
-  const { db } = await connectToDatabase()
   
   await admin.auth().verifyIdToken(token)
     .then(decodedToken => {
@@ -20,30 +17,19 @@ export default async function handler (req, res) {
       }
       return decodedToken
     })
-    .then(async decodedToken => await db.collection('bookings')
-      .find({
-        user: decodedToken.uid
-      })
-      .toArray()
-    )
-    .then(reservedTimes => {
+    .then(async decodedToken => {
       const data = timeList
-      data.forEach(time => {
-        time.is_reserved = false
-      })
+      const userID = decodedToken.uid
 
-      reservedTimes.forEach(reservedTime => {
-        const index = timeList.findIndex(time => time.id == reservedTime.time_id)
-        data[index].is_reserved = true
-      })
+      await Promise.all(timeList.map(async (time, index) => {
+        const timeID = time.id
+        data[index].is_reserved = await isReserved(userID ,timeID)
+        data[index].is_full = await isFull(timeID)
+      }))
 
       return data
     })
-    .then(async data => {
-      for(let i = 0; i < data.length; i++) {
-        data[i].is_full = await isFull(data[i].id)
-      }
-
+    .then(data => {
       res.statusCode = 200
       res.json(data)
     })
