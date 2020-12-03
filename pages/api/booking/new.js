@@ -1,15 +1,14 @@
 import admin from 'firebase-admin'
 import initFirebaseAdmin from '../../../utils/firebase/initAdmin'
-import events from '../../../events.json'
 import { connectToDatabase } from '../../../utils/mongodb'
-import validateEvents from '../../../utils/validateEvents'
+import { isReserved, isFull } from '../../../utils/validateTimeID'
 
 export default async function handler (req, res) {
   const {
-    query: { token, event },
+    query: { token, time_id },
   } = req
 
-  if(!token || !event) {
+  if(!token || !time_id) {
     res.statusCode = 400
     res.json({ error: 'bad request' })
     return
@@ -17,21 +16,24 @@ export default async function handler (req, res) {
 
   initFirebaseAdmin()
 
-  const { db } = connectToDatabase()
+  const { db } = await connectToDatabase()
 
   await admin.auth().verifyIdToken(token)
-    .then(decodedToken => {
+    .then(async decodedToken => {
+      const uid = decodedToken.uid
+
       if(!decodedToken.email_verified) {
         throw new Error('email is not verified')
       }
-      
-      const uid = decodedToken.uid
-      validateEvents(uid, event)
 
-      return db.collection('bookings')
+      if(isReserved(uid, time_id) || isFull(time_id)) {
+        throw new Error('invalid id')
+      }
+
+      return await db.collection('bookings')
         .insertOne({
           user: uid,
-          event: event,
+          time_id: time_id,
           created_at: new Date()
         })
     })
@@ -40,7 +42,7 @@ export default async function handler (req, res) {
       res.json({ sucess: true })
     })
     .catch(err => {
-      if(err.code == 'auth/argument-error') {
+      if(err.message == 'invalid id' || err.code == 'auth/argument-error') {
         res.statusCode = 400
         res.json({ error: 'bad request' })
       } else {
