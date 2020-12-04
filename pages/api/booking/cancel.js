@@ -34,7 +34,7 @@ export default async function handler (req, res) {
     })
     .then(() => {
       res.statusCode = 200
-      res.json({ sucess: true })
+      res.json({ success: true })
     })
     .catch(err => {
       console.log(err)

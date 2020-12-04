@@ -39,7 +39,7 @@ export default async function handler (req, res) {
     })
     .then(() => {
       res.statusCode = 200
-      res.json({ sucess: true })
+      res.json({ success: true })
     })
     .catch(err => {
       if(err.message == 'invalid id' || err.code == 'auth/argument-error') {
