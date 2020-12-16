@@ -1,8 +1,11 @@
 import { connectToDatabase } from './mongodb'
-import timeList from '../time_list.json'
+import events from '../events.json'
 
 function isExists(timeID) {
-  const index = timeList.findIndex(timeInfo => timeInfo.id == timeID)
+  const index = -1
+  events.map(eventInfo => {
+    eventInfo.times.findIndex(timeInfo => timeInfo.id == timeID)
+  })
   if(index == -1) {
     throw new Error('time not found')
   }
