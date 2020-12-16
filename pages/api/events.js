@@ -17,18 +17,18 @@ export default async function handler(req, res) {
       }
       return decodedToken
     })
-    .then(decodedToken => {
+    .then(async decodedToken => {
       const data = events
       const userID = decodedToken.uid
 
-      events.map((eventInfo, eventIndex) => {
-        Promise.all(eventInfo.times.map(async (time, timeIndex) => {
+      await Promise.all(data.map(async eventInfo => {
+        await Promise.all(eventInfo.times.map(async time => {
           const timeID = time.id
-          const timeData = data[eventIndex]['times'][timeIndex]
-          timeData.booking_id = await isReserved(userID ,timeID)
-          timeData.is_full = await isFull(timeID)
+          
+          time.booking_id = await isReserved(userID ,timeID)
+          time.is_full = await isFull(timeID)
         }))
-      })
+      }))
 
       return data
     })
