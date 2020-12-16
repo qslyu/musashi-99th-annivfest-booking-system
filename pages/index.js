@@ -1,20 +1,33 @@
 import { useRouter } from 'next/router'
 import { Grid, Heading, Button } from 'grommet'
+import Spinner from '../components/loadingSpinner'
 import Layout from '../components/layout'
+import EventList from '../components/eventList'
 
-export default function Home() {
+export default function Home({ token }) {
   const router = useRouter()
+
   return (
     <Layout>
       <Heading>第99回武蔵記念祭</Heading>
-      <Grid
-        rows={['medium', 'meduim']}
-        columns={['auto', 'auto']}
-        gap="small" 
-      >
-        <Button primary label="新規登録" onClick={() => router.push('/signup')} />
-        <Button         label="ログイン" onClick={() => router.push('/login')}  />
-      </Grid>
+      {
+        token ? (
+          token.isLoading ? (
+            <Spinner />
+          ) : (
+            <EventList token={token} />
+          )
+        ) : (
+          <Grid
+            rows={['medium', 'meduim']}
+            columns={['auto', 'auto']}
+            gap="small"
+          >
+            <Button primary label="新規登録" onClick={() => router.push('/signup')} />
+            <Button label="ログイン" onClick={() => router.push('/login')}  />
+          </Grid>
+        )
+      }
     </Layout>
   )
 }
