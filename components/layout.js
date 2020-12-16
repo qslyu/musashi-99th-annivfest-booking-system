@@ -1,9 +1,9 @@
-import { Box } from 'grommet'
+import { Main } from 'grommet'
 
 export default function Layout({ children }) {
   return (
     <>
-      <Box align="center" margin="large">{ children }</Box>
+      <Main pad="medium" align="center">{ children }</Main>
     </>
   )
 }
