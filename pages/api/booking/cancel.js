@@ -22,7 +22,7 @@ export default async function handler (req, res) {
     .then(async decodedToken => {
       const uid = decodedToken.uid
 
-      if(!isReserved(uid, time_id)) {
+      if(!await isReserved(uid, time_id)) {
         throw new Error('invalid id')
       }
 

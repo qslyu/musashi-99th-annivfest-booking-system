@@ -26,7 +26,7 @@ export default async function handler (req, res) {
         throw new Error('email is not verified')
       }
 
-      if(isReserved(uid, time_id) || isFull(time_id)) {
+      if(!!await isReserved(uid, time_id) || await isFull(time_id)) {
         throw new Error('invalid id')
       }
 
@@ -42,6 +42,7 @@ export default async function handler (req, res) {
       res.json({ success: true })
     })
     .catch(err => {
+      console.log(err)
       if(err.message == 'invalid id' || err.code == 'auth/argument-error') {
         res.statusCode = 400
         res.json({ error: 'bad request' })
