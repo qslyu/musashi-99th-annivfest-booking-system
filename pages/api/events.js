@@ -1,6 +1,6 @@
 import admin from 'firebase-admin'
 import initFirebaseAdmin from '../../utils/firebase/initAdmin'
-import timeList from '../../time_list.json'
+import events from '../../events.json'
 import { isReserved, isFull } from '../../utils/validateTimeID'
 
 export default async function handler(req, res) {
@@ -17,15 +17,18 @@ export default async function handler(req, res) {
       }
       return decodedToken
     })
-    .then(async decodedToken => {
-      const data = timeList
+    .then(decodedToken => {
+      const data = events
       const userID = decodedToken.uid
 
-      await Promise.all(timeList.map(async (time, index) => {
-        const timeID = time.id
-        data[index].booking_id = await isReserved(userID ,timeID)
-        data[index].is_full = await isFull(timeID)
-      }))
+      events.map((eventInfo, eventIndex) => {
+        Promise.all(eventInfo.times.map(async (time, timeIndex) => {
+          const timeID = time.id
+          const timeData = data[eventIndex]['times'][timeIndex]
+          timeData.booking_id = await isReserved(userID ,timeID)
+          timeData.is_full = await isFull(timeID)
+        }))
+      })
 
       return data
     })
