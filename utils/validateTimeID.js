@@ -1,19 +1,19 @@
 import { connectToDatabase } from './mongodb'
 import events from '../events.json'
 
-function isExists(timeID) {
-  const index = -1
+function getLimit(timeID) {
+  let limit = -1
   events.map(eventInfo => {
-    eventInfo.times.findIndex(timeInfo => timeInfo.id == timeID)
+    if(eventInfo.times.find(timeInfo => timeInfo.id == timeID)) limit = eventInfo.limit
   })
-  if(index == -1) {
+  if(limit == -1) {
     throw new Error('time not found')
   }
-  return index
+  return limit
 }
 
 export async function isReserved(userID, timeID) {
-  isExists(timeID)
+  getLimit(timeID)
 
   const { db } = await connectToDatabase()
 
@@ -30,8 +30,7 @@ export async function isReserved(userID, timeID) {
 }
 
 export async function isFull(timeID) {
-  const index = isExists(timeID)
-  const limit = timeList[index].limit
+  const limit = getLimit(timeID)
 
   const { db } = await connectToDatabase()
 
