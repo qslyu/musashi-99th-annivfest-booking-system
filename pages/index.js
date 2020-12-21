@@ -3,6 +3,7 @@ import { Grid, Heading, Button } from 'grommet'
 import Spinner from '../components/loadingSpinner'
 import Layout from '../components/layout'
 import EventList from '../components/eventList'
+import LogoutButton from '../components/logoutButton'
 
 export default function Home({ token }) {
   const router = useRouter()
@@ -15,7 +16,10 @@ export default function Home({ token }) {
           token.isLoading ? (
             <Spinner />
           ) : (
-            <EventList token={token} />
+            <>
+              <LogoutButton />
+              <EventList token={token} />
+            </>
           )
         ) : (
           <Grid
