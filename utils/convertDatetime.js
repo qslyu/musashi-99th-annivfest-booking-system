@@ -1,4 +1,4 @@
-export default function toJapanese(d) {
+export function toString(d) {
   const datetime = new Date(d)
 
   const month = datetime.getMonth()
@@ -8,3 +8,13 @@ export default function toJapanese(d) {
 
   return `${month}/${date} ${hours}:${minutes}〜`
 }
+
+export function toDateString(d) {
+  const datetime = new Date(d)
+
+  const month = datetime.getMonth()
+  const date = datetime.getDate()
+
+  return `${month}/${date}`
+}
+
