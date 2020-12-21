@@ -5,7 +5,7 @@ import 'firebase/auth'
 import { Heading, Box, Form, FormField, TextInput, Text, Select } from 'grommet'
 import ButtonLoader from '../components/buttonLoader'
 import Layout from '../components/layout'
-import { numberRule, passwordRule, dateRule } from '../utils/grommet/rules'
+import { numberRule, passwordRule } from '../utils/grommet/rules'
 import { toDateString } from '../utils/convertDatetime'
 import schedule from '../schedule.json'
 
