@@ -22,10 +22,6 @@ export default async function handler (req, res) {
     .then(async decodedToken => {
       const uid = decodedToken.uid
 
-      if(!decodedToken.email_verified) {
-        throw new Error('email is not verified')
-      }
-
       if(!!await isReserved(uid, time_id) || await isFull(time_id)) {
         throw new Error('invalid id')
       }
