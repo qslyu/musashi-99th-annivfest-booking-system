@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import fetcher from '../../utils/swr/fetcher'
 import { Heading, Text } from 'grommet'
-import toJapanese from '../../utils/convertDatetime'
+import { toString } from '../../utils/convertDatetime'
 
 const BarcodeReader = dynamic(() => import('react-qr-reader'), {
   ssr: false,
@@ -44,7 +44,7 @@ export default function QRcodeReader() {
       {showEventInfo && (
         <>
           <Heading>{showEventInfo.event}</Heading>
-          <Text>{toJapanese(showEventInfo.datetime)}</Text>
+          <Text>{toString(showEventInfo.datetime)}</Text>
         </>
       )}
     </>
