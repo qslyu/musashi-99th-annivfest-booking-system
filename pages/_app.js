@@ -22,7 +22,7 @@ export default function MyApp({ Component, pageProps }) {
           })
 
         if(pathname == '/signup' || pathname == '/login') router.push('/')
-        if(!user.emailVerified) router.push('/emailsent')
+
       } else {
         setToken()
       }

@@ -3,7 +3,7 @@ import Spinner from './loadingSpinner'
 import { useState } from 'react'
 import useSWR, { mutate } from 'swr'
 import fetcher from '../utils/swr/fetcher'
-import toJapanese from '../utils/convertDatetime'
+import { toString } from '../utils/convertDatetime'
 import QRCode from 'qrcode.react'
 
 export default function TimeList({ token }) {
@@ -47,7 +47,7 @@ export default function TimeList({ token }) {
                       >
                         <Box gridArea="info" justify="center">
                           {isReserved && <Text>予約済み</Text>}
-                          <Heading level="2" margin={{vertical: 'xsmall'}}>{toJapanese(time.datetime)}</Heading>
+                          <Heading level="2" margin={{vertical: 'xsmall'}}>{toString(time.datetime)}</Heading>
                         </Box>
                         <Box gridArea="button" justify="center">
                           {isReserved ? (
@@ -86,7 +86,7 @@ export default function TimeList({ token }) {
           <Layer>
             <Box align="center" margin="large">
               <Heading>{showModal.event}</Heading>
-              <Heading level='3' margin='none'>{toJapanese(showModal.time.datetime)}</Heading>
+              <Heading level='3' margin='none'>{toString(showModal.time.datetime)}</Heading>
               <Box margin='large'>
                 <Text>予約しますか？</Text>
               </Box>
@@ -121,7 +121,7 @@ export default function TimeList({ token }) {
           <Layer>
             <Box align="center" margin="large">
               <Heading>{showCancelModal.event}</Heading>
-              <Heading level='3' margin='none'>{toJapanese(showCancelModal.time.datetime)}</Heading>
+              <Heading level='3' margin='none'>{toString(showCancelModal.time.datetime)}</Heading>
               <Box margin='large'>
                 <Text>キャンセルしますか？</Text>
               </Box>
@@ -156,7 +156,7 @@ export default function TimeList({ token }) {
           <Layer>
             <Box align="center" margin="large">
               <Heading>{showQRModal.event}</Heading>
-              <Heading level='3' margin='none'>{toJapanese(showQRModal.time.datetime)}</Heading>
+              <Heading level='3' margin='none'>{toString(showQRModal.time.datetime)}</Heading>
               <Text margin='medium'>この画面をスタッフに見せてください</Text>
               <Box margin='large'>
                 <QRCode value={showQRModal.time.booking_id} />

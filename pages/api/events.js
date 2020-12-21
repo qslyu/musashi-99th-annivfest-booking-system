@@ -11,12 +11,6 @@ export default async function handler(req, res) {
   initFirebaseAdmin()
   
   await admin.auth().verifyIdToken(token)
-    .then(decodedToken => {
-      if(!decodedToken.email_verified) {
-        throw new Error('email is not verified')
-      }
-      return decodedToken
-    })
     .then(async decodedToken => {
       const data = events
       const userID = decodedToken.uid

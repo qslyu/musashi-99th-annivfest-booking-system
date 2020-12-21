@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import { Heading, Box, Form, FormField, TextInput, Text } from 'grommet'
+import { Heading, Box, Form, FormField, TextInput, Text, Select } from 'grommet'
 import ButtonLoader from '../components/buttonLoader'
 import Layout from '../components/layout'
-import { usernameRules, emailRules, passwordRules } from '../utils/grommet/rules'
+import { numberRule, passwordRule, dateRule } from '../utils/grommet/rules'
+import { toDateString } from '../utils/convertDatetime'
+import schedule from '../schedule.json'
 
 export default function SignUp() {
   const router = useRouter()
@@ -13,22 +15,31 @@ export default function SignUp() {
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState()
 
+  const scheduleStr = []
+  schedule.map(date => {
+    scheduleStr.push(toDateString(date))
+  })
+
   function signUp(val) {
     setLoading(true)
     setError()
     
-    const displayname = val.displayname
-    const email = val.email
+    const displayname = val.date
+    const email = `${val.number}@634-annivfest.jp`
     const password = val.password
-  
+    
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => firebase.auth().currentUser.updateProfile({displayName: displayname}))
-      .then(() => firebase.auth().currentUser.sendEmailVerification())
-      .then(() => router.push('/emailsent'))
+      .then(() => router.push('/'))
       .catch(err => {
         setLoading(false)
-        setError(err.message)
+        if(err.code == 'auth/email-already-in-use') {
+          setError('予約番号がすでに登録されています')
+        } else {
+          setError(err.message)
+        }
       })
+
   }
 
   return (
@@ -39,25 +50,34 @@ export default function SignUp() {
         validate="submit"
       >
         <FormField
-          name="displayname"
-          label="名前"
-          validate={usernameRules}
+          name="number"
+          label="予約番号"
+          required
+          validate={numberRule}
         >
-          <TextInput name="displayname" />
-        </FormField>
-        <FormField
-          name="email"
-          label="メールアドレス"
-          validate={emailRules}
-        >
-          <TextInput name="email" />
+          <TextInput
+            name="number"
+          />
         </FormField>
         <FormField
           name="password"
           label="パスワード"
-          validate={passwordRules}
+          validate={passwordRule}
         >
-          <TextInput type="password" name="password" />
+          <TextInput
+            type="password"
+            name="password"
+          />
+        </FormField>
+        <FormField
+          name="date"
+          label="参加日程"
+          required
+        >
+          <Select
+            name="date"
+            options={scheduleStr}
+          />
         </FormField>
         <Box direction="column" top="large">
           <ButtonLoader label="登録" labelLoad="送信中" isLoading={isLoading} />
