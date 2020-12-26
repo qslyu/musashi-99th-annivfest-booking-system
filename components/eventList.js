@@ -25,7 +25,10 @@ export default function TimeList({ token }) {
                 <Heading>{eventInfo.name}</Heading>
 
                 {eventInfo['times'].map(time => {
-                  const isReserved = time.booking_id
+                  const isReserved = !!time.booking_id
+                  const reserved = time.reserved
+                  const limit = eventInfo.limit
+                  const isFull = reserved >= limit
 
                   return (
                     <Box
@@ -33,7 +36,7 @@ export default function TimeList({ token }) {
                       margin={{vertical: 'small'}}
                       pad={{vertical: 'medium', horizontal: 'medium'}}
                       direction="row"
-                      background={isReserved ? 'status-disabled' : 'light-3'}
+                      background={(isReserved || isFull) ? 'status-disabled' : 'light-3'}
                       round="medium"
                     >
                       <Grid
@@ -47,7 +50,9 @@ export default function TimeList({ token }) {
                       >
                         <Box gridArea="info" justify="center">
                           {isReserved && <Text>予約済み</Text>}
+                          {isFull && <Text>満員</Text>}
                           <Heading level="2" margin={{vertical: 'xsmall'}}>{toString(time.datetime)}</Heading>
+                          <Text>{`${reserved}/${limit}人`}</Text>
                         </Box>
                         <Box gridArea="button" justify="center">
                           {isReserved ? (
@@ -67,6 +72,7 @@ export default function TimeList({ token }) {
                           ) : (
                             <Button
                               primary
+                              disabled={isFull}
                               label='予約'
                               margin={{vertical: 'xxsmall'}}
                               onClick={() => setShowModal({'event': eventInfo.name, 'time': time})}
