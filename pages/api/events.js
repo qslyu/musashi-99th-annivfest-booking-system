@@ -1,7 +1,7 @@
 import admin from 'firebase-admin'
 import initFirebaseAdmin from '../../utils/firebase/initAdmin'
 import { events } from '../../schedule.json'
-import { isReserved, isFull } from '../../utils/validateTimeID'
+import { isReserved, reserved } from '../../utils/validateTimeID'
 
 export default async function handler(req, res) {
   const {
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
           const timeID = time.id
           
           time.booking_id = await isReserved(userID ,timeID)
-          time.is_full = await isFull(timeID)
+          time.reserved = await reserved(timeID)
         }))
       }))
 

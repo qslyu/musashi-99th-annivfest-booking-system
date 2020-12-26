@@ -30,7 +30,11 @@ export async function isReserved(userID, timeID) {
 }
 
 export async function isFull(timeID) {
-  const limit = getLimit(timeID)
+  return await reserved(timeID) >= getLimit(timeID)
+}
+
+export async function reserved(timeID) {
+  getLimit(timeID)
 
   const { db } = await connectToDatabase()
 
@@ -40,5 +44,5 @@ export async function isFull(timeID) {
     })
     .count()
 
-  return reserved >= limit
+  return reserved
 }
