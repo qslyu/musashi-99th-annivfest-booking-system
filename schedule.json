@@ -1,1 +1,37 @@
-["Tue, 19 Aug 1975", "Tue, 20 Aug 1975"]
+{
+  "dates": ["Tue, 19 Aug 1975", "Tue, 20 Aug 1975"],
+  "events": [
+    {
+      "id": "edf3092d-3a6f-4a74-a0fd-9d11522aa329",
+      "name": "校内ツアー",
+      "description": "イベントAです。",
+      "limit": 1000,
+      "times": [
+        {
+          "id": "18a0d3ea-09ce-494d-8048-1d837e2bc438",
+          "datetime": "Tue, 19 Aug 1975 23:15:30 GMT"
+        },
+        {
+          "id": "83385160-df46-4699-93da-89e67ce26af7",
+          "datetime": "Tue, 20 Aug 1975 23:15:30 GMT"
+        }
+      ]
+    },
+    {
+      "id": "a51a040a-e2d0-4b10-9078-535dacaa626f",
+      "name": "イベントB",
+      "description": "イベントBです。",
+      "limit": 1200,
+      "times": [
+        {
+          "id": "c26ccc8e-3213-4174-bc76-7532d2ba1d2a",
+          "datetime": "Tue, 19 Aug 1975 23:15:30 GMT"
+        },
+        {
+          "id": "0c1f2472-1523-4a2f-a8a7-fd66a8e3e854",
+          "datetime": "Tue, 20 Aug 1975 23:15:30 GMT"
+        }
+      ]
+    }
+  ]
+}

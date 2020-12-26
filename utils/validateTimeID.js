@@ -1,5 +1,5 @@
 import { connectToDatabase } from './mongodb'
-import events from '../events.json'
+import { events } from '../schedule.json'
 
 function getLimit(timeID) {
   let limit = -1

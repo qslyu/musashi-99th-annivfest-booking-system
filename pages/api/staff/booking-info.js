@@ -1,6 +1,6 @@
 import mongodb from 'mongodb'
 import { connectToDatabase } from '../../../utils/mongodb'
-import events from '../../../events.json'
+import { events } from '../../../schedule.json'
 
 export default async function handler(req, res) {
   const {

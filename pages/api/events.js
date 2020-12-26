@@ -1,6 +1,6 @@
 import admin from 'firebase-admin'
 import initFirebaseAdmin from '../../utils/firebase/initAdmin'
-import events from '../../events.json'
+import { events } from '../../schedule.json'
 import { isReserved, isFull } from '../../utils/validateTimeID'
 
 export default async function handler(req, res) {
