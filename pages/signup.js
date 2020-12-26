@@ -7,7 +7,7 @@ import ButtonLoader from '../components/buttonLoader'
 import Layout from '../components/layout'
 import { numberRule, passwordRule } from '../utils/grommet/rules'
 import { toDateString } from '../utils/convertDatetime'
-import schedule from '../schedule.json'
+import { dates } from '../schedule.json'
 
 export default function SignUp() {
   const router = useRouter()
@@ -15,9 +15,9 @@ export default function SignUp() {
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState()
 
-  const scheduleStr = []
-  schedule.map(date => {
-    scheduleStr.push(toDateString(date))
+  const datesStr = []
+  dates.map(date => {
+    datesStr.push(toDateString(date))
   })
 
   function signUp(val) {
@@ -76,7 +76,7 @@ export default function SignUp() {
         >
           <Select
             name="date"
-            options={scheduleStr}
+            options={datesStr}
           />
         </FormField>
         <Box direction="column" top="large">
