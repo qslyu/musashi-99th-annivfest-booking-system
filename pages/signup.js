@@ -17,14 +17,14 @@ export default function SignUp() {
 
   const datesStr = []
   dates.map(date => {
-    datesStr.push(toDateString(date))
+    datesStr.push({ str: toDateString(date), row: date })
   })
 
   function signUp(val) {
     setLoading(true)
     setError()
     
-    const displayname = val.date
+    const displayname = val.date.row
     const email = `${val.number}@634-annivfest.jp`
     const password = val.password
     
@@ -77,6 +77,7 @@ export default function SignUp() {
           <Select
             name="date"
             options={datesStr}
+            labelKey="str"
           />
         </FormField>
         <Box direction="column" top="large">
