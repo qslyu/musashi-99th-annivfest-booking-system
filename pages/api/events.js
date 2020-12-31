@@ -12,15 +12,38 @@ export default async function handler(req, res) {
   
   await admin.auth().verifyIdToken(token)
     .then(async decodedToken => {
-      const data = events
+      const data = []
       const userID = decodedToken.uid
+      const participationDate = new Date(decodedToken.name)
 
-      await Promise.all(data.map(async eventInfo => {
-        await Promise.all(eventInfo.times.map(async time => {
-          const timeID = time.id
-          
-          time.booking_id = await isReserved(userID ,timeID)
-          time.reserved = await reserved(timeID)
+      console.log(participationDate)
+
+      await Promise.all(events.map(async (eventInfo, eIndex) => {
+        data[eIndex] = {
+          id:          eventInfo.id,
+          name:        eventInfo.name,
+          description: eventInfo.description,
+          limit:       eventInfo.limit,
+          times: []
+        }
+
+        await Promise.all(eventInfo.times.map(async (time, tIndex) => {
+          const date = new Date(time.datetime)
+
+          if(
+            participationDate.getUTCFullYear() == date.getUTCFullYear() &&
+            participationDate.getUTCMonth() == date.getUTCMonth() &&
+            participationDate.getUTCDate() == date.getUTCDate()
+          ) {
+            const timeID = time.id
+
+            data[eIndex].times[tIndex] = {
+              id: timeID,
+              datetime: time.datetime,
+              booking_id: await isReserved(userID ,timeID),
+              reserved: await reserved(timeID)
+            }
+          }
         }))
       }))
 
