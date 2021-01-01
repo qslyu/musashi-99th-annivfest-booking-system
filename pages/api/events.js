@@ -12,11 +12,13 @@ export default async function handler(req, res) {
   
   await admin.auth().verifyIdToken(token)
     .then(async decodedToken => {
+      if(!decodedToken.name) {
+        throw new Error('no date set')
+      }
+
       const data = []
       const userID = decodedToken.uid
-      const participationDate = new Date(decodedToken.name)
-
-      console.log(participationDate)
+      const participationDate = new Date(decodedToken.name).getTime()
 
       await Promise.all(events.map(async (eventInfo, eIndex) => {
         data[eIndex] = {
@@ -27,22 +29,18 @@ export default async function handler(req, res) {
           times: []
         }
 
-        await Promise.all(eventInfo.times.map(async (time, tIndex) => {
-          const date = new Date(time.datetime)
+        await Promise.all(eventInfo.times.map(async (time) => {
+          const date = new Date(time.datetime).getTime()
 
-          if(
-            participationDate.getUTCFullYear() == date.getUTCFullYear() &&
-            participationDate.getUTCMonth() == date.getUTCMonth() &&
-            participationDate.getUTCDate() == date.getUTCDate()
-          ) {
+          if(participationDate <= date && date < participationDate + 86400000 ) {
             const timeID = time.id
 
-            data[eIndex].times[tIndex] = {
+            data[eIndex].times.push({
               id: timeID,
               datetime: time.datetime,
               booking_id: await isReserved(userID ,timeID),
               reserved: await reserved(timeID)
-            }
+            })
           }
         }))
       }))
@@ -58,6 +56,9 @@ export default async function handler(req, res) {
       if(err.code == 'auth/argument-error') {
         res.statusCode = 400
         res.json({ error: 'bad request' })
+      } else if(err.message == 'no date set') {
+        res.statusCode = 400
+        res.json({ error: 'need to refresh token' })
       } else {
         res.statusCode = 500
         res.json({ error: 'internal server error' })
