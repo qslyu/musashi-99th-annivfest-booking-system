@@ -6,13 +6,19 @@ import fetcher from '../utils/swr/fetcher'
 import { toString } from '../utils/convertDatetime'
 import QRCode from 'qrcode.react'
 
-export default function TimeList({ token }) {
+export default function TimeList({ token, handleRefreshToken }) {
+
   const [showModal, setShowModal] = useState()
   const [showCancelModal, setShowCancelModal] = useState()
   const [showQRModal, setShowQRModal] = useState()
   
   const { data } = useSWR(`/api/events?token=${token}`, fetcher)
-  if(data) {
+
+  if(data && data.error == 'need to refresh token') {
+    handleRefreshToken()
+  }
+
+  if(data && !data.error) {
     return (
       <>
         <Box>

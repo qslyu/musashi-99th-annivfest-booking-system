@@ -9,6 +9,13 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter()
   const [token, setToken] = useState({ isLoading: true })
 
+  function handleRefreshToken() {
+    firebase.auth().currentUser.getIdToken(true)
+      .then(idToken => {
+        setToken(idToken)
+      })
+  }
+
   useEffect(() => {
     initFirebase()
 
@@ -31,7 +38,7 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <Grommet theme={grommetTheme}>
-      <Component {...pageProps} token={token} />
+      <Component {...pageProps} token={token} handleRefreshToken={() => handleRefreshToken()} />
     </Grommet>
   )
 }

@@ -5,7 +5,7 @@ import Layout from '../components/layout'
 import EventList from '../components/eventList'
 import LogoutButton from '../components/logoutButton'
 
-export default function Home({ token }) {
+export default function Home({ token, handleRefreshToken }) {
   const router = useRouter()
 
   return (
@@ -17,8 +17,7 @@ export default function Home({ token }) {
             <Spinner />
           ) : (
             <>
-              <LogoutButton />
-              <EventList token={token} />
+              <EventList token={token} handleRefreshToken={() => handleRefreshToken()}/>
             </>
           )
         ) : (
