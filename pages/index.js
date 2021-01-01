@@ -3,7 +3,7 @@ import { Grid, Heading, Button } from 'grommet'
 import Spinner from '../components/loadingSpinner'
 import Layout from '../components/layout'
 import EventList from '../components/eventList'
-import LogoutButton from '../components/logoutButton'
+import NavigationBar from '../components/navigationBar'
 
 export default function Home({ token, handleRefreshToken }) {
   const router = useRouter()
@@ -17,6 +17,7 @@ export default function Home({ token, handleRefreshToken }) {
             <Spinner />
           ) : (
             <>
+              <NavigationBar />
               <EventList token={token} handleRefreshToken={() => handleRefreshToken()}/>
             </>
           )
