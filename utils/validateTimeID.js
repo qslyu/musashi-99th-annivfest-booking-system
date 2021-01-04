@@ -1,5 +1,6 @@
 import { connectToDatabase } from './mongodb'
 import { events } from '../schedule.json'
+import { isParticipationDate } from './datetime'
 
 function getLimit(timeID) {
   let limit = -1
@@ -45,4 +46,19 @@ export async function reserved(timeID) {
     .count()
 
   return reserved
+}
+
+export function isParticipation(participationDate, timeID) {
+  let time = -1
+
+  events.map(eventInfo => {
+    const found = eventInfo.times.find(timeInfo => timeInfo.id == timeID)
+    if(found) time = found
+  })
+  
+  if(time == -1) {
+    throw new Error('time not found')
+  }
+
+  return isParticipationDate(new Date(participationDate).getTime(), new Date(time.datetime).getTime())
 }

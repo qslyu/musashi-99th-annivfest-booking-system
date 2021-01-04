@@ -1,7 +1,7 @@
 import admin from 'firebase-admin'
 import initFirebaseAdmin from '../../../utils/firebase/initAdmin'
 import { connectToDatabase } from '../../../utils/mongodb'
-import { isReserved, isFull } from '../../../utils/validateTimeID'
+import { isReserved, isFull, isParticipation } from '../../../utils/validateTimeID'
 
 export default async function handler (req, res) {
   const {
@@ -21,8 +21,9 @@ export default async function handler (req, res) {
   await admin.auth().verifyIdToken(token)
     .then(async decodedToken => {
       const uid = decodedToken.uid
-
-      if(!!await isReserved(uid, time_id) || await isFull(time_id)) {
+      const participationDate = decodedToken.name
+      
+      if(!!await isReserved(uid, time_id) || await isFull(time_id) || !isParticipation(participationDate, time_id)) {
         throw new Error('invalid id')
       }
 

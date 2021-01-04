@@ -18,3 +18,6 @@ export function toDateString(d) {
   return `${month}/${date}`
 }
 
+export function isParticipationDate(participationDate, date) {
+  return participationDate <= date && date < participationDate + 86400000
+}

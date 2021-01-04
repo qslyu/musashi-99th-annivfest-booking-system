@@ -2,6 +2,7 @@ import admin from 'firebase-admin'
 import initFirebaseAdmin from '../../utils/firebase/initAdmin'
 import { events } from '../../schedule.json'
 import { isReserved, reserved } from '../../utils/validateTimeID'
+import { isParticipationDate } from '../../utils/datetime'
 
 export default async function handler(req, res) {
   const {
@@ -32,7 +33,7 @@ export default async function handler(req, res) {
         await Promise.all(eventInfo.times.map(async (time) => {
           const date = new Date(time.datetime).getTime()
 
-          if(participationDate <= date && date < participationDate + 86400000 ) {
+          if(isParticipationDate(participationDate, date)) {
             const timeID = time.id
 
             data[eIndex].times.push({

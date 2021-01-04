@@ -6,7 +6,7 @@ import { Heading, Box, Form, FormField, TextInput, Text, Select } from 'grommet'
 import ButtonLoader from '../components/buttonLoader'
 import Layout from '../components/layout'
 import { numberRule, passwordRule } from '../utils/grommet/rules'
-import { toDateString } from '../utils/convertDatetime'
+import { toDateString } from '../utils/datetime'
 import { dates } from '../schedule.json'
 
 export default function SignUp() {
