@@ -3,7 +3,7 @@ import Spinner from './loadingSpinner'
 import { useState } from 'react'
 import useSWR, { mutate } from 'swr'
 import fetcher from '../utils/swr/fetcher'
-import { toString } from '../utils/convertDatetime'
+import { toString } from '../utils/datetime'
 import QRCode from 'qrcode.react'
 
 export default function TimeList({ token, handleRefreshToken }) {
