@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import { Text, Anchor, Box } from 'grommet'
 import { useRouter } from 'next/router'
-import { toDateString } from '../utils/convertDatetime'
+import { toDateString } from '../utils/datetime'
 
 export default function LogoutButton() {
   const router = useRouter()

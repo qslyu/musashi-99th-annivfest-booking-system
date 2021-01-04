@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import fetcher from '../../utils/swr/fetcher'
 import { Heading, Text } from 'grommet'
-import { toString } from '../../utils/convertDatetime'
+import { toString } from '../../utils/datetime'
 
 const BarcodeReader = dynamic(() => import('react-qr-reader'), {
   ssr: false,
