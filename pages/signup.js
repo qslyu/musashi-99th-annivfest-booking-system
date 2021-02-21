@@ -5,7 +5,7 @@ import 'firebase/auth'
 import { Heading, Box, Form, FormField, TextInput, Text, Select } from 'grommet'
 import ButtonLoader from '../components/buttonLoader'
 import Layout from '../components/layout'
-import { numberRule, passwordRule } from '../utils/grommet/rules'
+import { passwordRule } from '../utils/grommet/rules'
 import { toDateString } from '../utils/datetime'
 import { dates } from '../schedule.json'
 
@@ -25,7 +25,7 @@ export default function SignUp() {
     setError()
     
     const displayname = val.date.row
-    const email = `${val.number}@634-annivfest.jp`
+    const email = `${val.id}@634-annivfest.jp`
     const password = val.password
     
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -34,7 +34,7 @@ export default function SignUp() {
       .catch(err => {
         setLoading(false)
         if(err.code == 'auth/email-already-in-use') {
-          setError('予約番号がすでに登録されています')
+          setError('このIDはすでに使用されています')
         } else {
           setError(err.message)
         }
@@ -50,13 +50,12 @@ export default function SignUp() {
         validate="submit"
       >
         <FormField
-          name="number"
-          label="予約番号"
+          name="id"
+          label="ID"
           required
-          validate={numberRule}
         >
           <TextInput
-            name="number"
+            name="id"
           />
         </FormField>
         <FormField

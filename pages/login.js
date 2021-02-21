@@ -5,7 +5,7 @@ import 'firebase/auth'
 import { Heading, Box, Form, FormField, TextInput, Text } from 'grommet'
 import ButtonLoader from '../components/buttonLoader'
 import Layout from '../components/layout'
-import { numberRule, passwordRule } from '../utils/grommet/rules'
+import { passwordRule } from '../utils/grommet/rules'
 
 export default function Login() {
   const router = useRouter()
@@ -17,7 +17,7 @@ export default function Login() {
     setLoading(true)
     setError()
     
-    const email = `${val.number}@634-annivfest.jp`
+    const email = `${val.id}@634-annivfest.jp`
     const password = val.password
   
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -27,7 +27,7 @@ export default function Login() {
 
         const errCode = err.code
         if(errCode == 'auth/user-not-found' || errCode == 'auth/wrong-password') {
-          setError('予約番号もしくはパスワードが違います')
+          setError('IDもしくはパスワードが違います')
         } else {
           setError(err.message)
         }
@@ -42,13 +42,12 @@ export default function Login() {
         validate="submit"
       >
         <FormField
-          name="number"
-          label="予約番号"
+          name="id"
+          label="ID"
           required
-          validate={numberRule}
         >
           <TextInput
-            name="number"
+            name="id"
           />
         </FormField>
         <FormField
