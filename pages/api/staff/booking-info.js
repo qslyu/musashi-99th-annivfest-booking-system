@@ -28,9 +28,7 @@ export default async function handler(req, res) {
 
     const data = bookingInfo
     const timeID = bookingInfo.time_id
-
-      console.log(bookingInfo)
-
+    
     await admin
       .auth()
       .getUser(bookingInfo.user)
