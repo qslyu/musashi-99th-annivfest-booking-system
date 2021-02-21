@@ -30,7 +30,7 @@ export default function TimeList({ token, handleRefreshToken }) {
               >
                 <Heading>{eventInfo.name}</Heading>
 
-                {eventInfo['times'].map(time => {
+                {eventInfo.times.map(time => {
                   const isReserved = !!time.booking_id
                   const reserved = time.reserved
                   const limit = eventInfo.limit

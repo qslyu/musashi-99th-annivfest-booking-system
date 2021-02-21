@@ -30,18 +30,18 @@ export default async function handler(req, res) {
           times: []
         }
 
-        await Promise.all(eventInfo.times.map(async (time) => {
+        await Promise.all(eventInfo.times.map(async (time, tIndex) => {
           const date = new Date(time.datetime).getTime()
 
           if(isParticipationDate(participationDate, date)) {
             const timeID = time.id
 
-            data[eIndex].times.push({
+            data[eIndex].times[tIndex] = {
               id: timeID,
               datetime: time.datetime,
               booking_id: await isReserved(userID ,timeID),
               reserved: await reserved(timeID)
-            })
+            }
           }
         }))
       }))
