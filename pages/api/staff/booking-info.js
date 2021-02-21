@@ -1,3 +1,5 @@
+import admin from 'firebase-admin'
+import initFirebaseAdmin from '../../../utils/firebase/initAdmin'
 import mongodb from 'mongodb'
 import { connectToDatabase } from '../../../utils/mongodb'
 import { events } from '../../../schedule.json'
@@ -6,6 +8,8 @@ export default async function handler(req, res) {
   const {
     query: { id },
   } = req
+
+  initFirebaseAdmin()
 
   try {
     const booking_id = new mongodb.ObjectID(id)
@@ -25,16 +29,25 @@ export default async function handler(req, res) {
     const data = bookingInfo
     const timeID = bookingInfo.time_id
 
-    events.map(event => {
-      const found = event.times.find(time => time.id == timeID)
-      if(found) {
-        data.event = event.name
-        data.datetime = found.datetime
-      }
-    })
+      console.log(bookingInfo)
 
-    res.statusCode = 200
-    res.json(data)
+    await admin
+      .auth()
+      .getUser(bookingInfo.user)
+      .then((userRecord) => {
+        data.username = userRecord.email.substr(0, userRecord.email.length - 17)
+
+        events.map(event => {
+          const found = event.times.find(time => time.id == timeID)
+          if(found) {
+            data.event = event.name
+            data.datetime = found.datetime
+          }
+        })
+
+        res.statusCode = 200
+        res.json(data)
+      })
     
   } catch(err) {
     console.log(err)

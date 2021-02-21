@@ -32,8 +32,6 @@ export default function QRcodeReader() {
         }}
       />
 
-      <Text>{code}</Text>
-
       {showError && (
         <>
           <Heading>エラー</Heading>
@@ -44,7 +42,9 @@ export default function QRcodeReader() {
       {showEventInfo && (
         <>
           <Heading>{showEventInfo.event}</Heading>
-          <Text>{toString(showEventInfo.datetime)}</Text>
+          <Text size="xlarge">{toString(showEventInfo.datetime)}</Text>
+          <br/><br/>
+          <Text size="large">ID : {showEventInfo.username}</Text>
         </>
       )}
     </>
