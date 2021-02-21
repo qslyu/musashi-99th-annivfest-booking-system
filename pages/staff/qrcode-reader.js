@@ -16,7 +16,7 @@ export default function QRcodeReader() {
   return (
     <>
       <BarcodeReader
-        style={{ width: '50%' }}
+        style={{ width: '100%' }}
         delay={300}
         onScan={async result => {
           const resultStr = `${result}`
@@ -25,6 +25,11 @@ export default function QRcodeReader() {
             const data = await fetcher(`/api/staff/booking-info?id=${result}`)
             if(!data.error) {
               setShowEventInfo(data)
+
+              setTimeout(() => {
+                setShowEventInfo()
+                setCode()
+              }, 3000)
             } else {
               setShowError(data)
             }
@@ -38,6 +43,12 @@ export default function QRcodeReader() {
           <Text>{showError.error}</Text>
         </>
       )}
+
+      {!showEventInfo && (
+        <Text>読み込み中</Text>
+      )
+
+      }
 
       {showEventInfo && (
         <>
